@@ -175,7 +175,13 @@
       text-transform: uppercase;
     }
 
-    .copy-bibtex-btn {
+    .bibtex-actions {
+      display: flex;
+      gap: 0.45rem;
+    }
+
+    .copy-bibtex-btn,
+    .toggle-bibtex-btn {
       border: 1px solid #4b6178;
       background: #2a3645;
       color: #d4e1ee;
@@ -187,7 +193,8 @@
       transition: all 0.15s ease;
     }
 
-    .copy-bibtex-btn:hover {
+    .copy-bibtex-btn:hover,
+    .toggle-bibtex-btn:hover {
       background: #324152;
       border-color: #607b97;
       box-shadow: 0 0 0 3px rgba(96, 123, 151, 0.22);
@@ -201,9 +208,17 @@
 
     .bibtex-code {
       margin: 0;
-      padding: 1rem 1.1rem;
+      padding: 0 1.1rem;
       background: linear-gradient(160deg, #171f29 0%, #1a2430 55%, #1e2a38 100%);
-      overflow-x: auto;
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.25s ease, padding 0.25s ease;
+    }
+
+    .bibtex-code.is-open {
+      padding: 1rem 1.1rem;
+      max-height: 560px;
+      overflow: auto;
     }
 
     .bibtex-code code {
@@ -300,9 +315,12 @@
         <div class="bibtex-card">
           <div class="bibtex-toolbar">
             <span class="bibtex-title">Citation Entry</span>
-            <button id="copyBibtexBtn" class="copy-bibtex-btn" type="button">Copy</button>
+            <div class="bibtex-actions">
+              <button id="toggleBibtexBtn" class="toggle-bibtex-btn" type="button" aria-expanded="false">Expand</button>
+              <button id="copyBibtexBtn" class="copy-bibtex-btn" type="button">Copy</button>
+            </div>
           </div>
-          <pre class="bibtex-code"><code id="bibtexText">@article{
+          <pre id="bibtexBlock" class="bibtex-code"><code id="bibtexText">@article{
       cui2026multi-nce,
       title={Learning Adaptive Multi-Stage Energy-based Prior for Hierarchical Generative Model},
       author={Jiali Cui and Tian Han},
@@ -322,22 +340,31 @@
 <script src="./static/js/jquery.min.js"></script>
 <script>
   (function () {
+    var toggleBtn = document.getElementById('toggleBibtexBtn');
+    var bibtexBlock = document.getElementById('bibtexBlock');
     var copyBtn = document.getElementById('copyBibtexBtn');
     var bibtexText = document.getElementById('bibtexText');
-    if (!copyBtn || !bibtexText || !navigator.clipboard) {
-      return;
+
+    if (toggleBtn && bibtexBlock) {
+      toggleBtn.addEventListener('click', function () {
+        var isOpen = bibtexBlock.classList.toggle('is-open');
+        toggleBtn.textContent = isOpen ? 'Collapse' : 'Expand';
+        toggleBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      });
     }
 
-    copyBtn.addEventListener('click', function () {
-      navigator.clipboard.writeText(bibtexText.textContent).then(function () {
-        copyBtn.textContent = 'Copied';
-        copyBtn.classList.add('copied');
-        setTimeout(function () {
-          copyBtn.textContent = 'Copy';
-          copyBtn.classList.remove('copied');
-        }, 1400);
+    if (copyBtn && bibtexText && navigator.clipboard) {
+      copyBtn.addEventListener('click', function () {
+        navigator.clipboard.writeText(bibtexText.textContent).then(function () {
+          copyBtn.textContent = 'Copied';
+          copyBtn.classList.add('copied');
+          setTimeout(function () {
+            copyBtn.textContent = 'Copy';
+            copyBtn.classList.remove('copied');
+          }, 1400);
+        });
       });
-    });
+    }
   })();
 </script>
 
