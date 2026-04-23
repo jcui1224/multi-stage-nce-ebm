@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Learning Multimodal EBM via MCMC Revision</title>
+
+  <!-- MathJax -->
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <!-- Bulma -->
+  <link rel="stylesheet" href="./static/css/bulma.min.css"/>
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css"/>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+
+  <link rel="icon" href="./static/images/favicon.ico"/>
+
+  <style>
+    :root {
+      --navy:   #0d1b2a;
+      --blue:   #1b4f72;
+      --accent: #2874a6;
+      --light:  #f4f6f9;
+      --border: #dce3ec;
+      --text:   #2c3e50;
+      --muted:  #6b7c93;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', 'Noto Sans', sans-serif;
+      color: var(--text);
+      background: #fff;
+    }
+
+    /* ── Hero ── */
+    .pub-hero {
+      background: linear-gradient(160deg, var(--navy) 0%, #1a2f4a 55%, var(--blue) 100%);
+      padding: 4rem 1.5rem 3rem;
+    }
+
+    .pub-hero .pub-title {
+      font-size: clamp(1.45rem, 3vw, 2.1rem);
+      font-weight: 700;
+      line-height: 1.35;
+      color: #fff;
+    }
+
+    .venue-badge {
+      display: inline-block;
+      background: #c0392b;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      padding: 3px 14px;
+      border-radius: 4px;
+      margin-bottom: 1.2rem;
+      text-transform: uppercase;
+    }
+
+    .pub-authors {
+      color: rgba(255,255,255,0.85);
+      font-size: 1.05rem;
+      margin: 1.1rem 0 0.4rem;
+    }
+
+    .pub-authors a {
+      color: #7ec8e3;
+      text-decoration: none;
+      transition: color .15s;
+    }
+    .pub-authors a:hover { color: #aee6f8; text-decoration: underline; }
+
+    .pub-inst {
+      color: rgba(255,255,255,0.55);
+      font-size: 0.95rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .pub-links .button {
+      margin: 4px 6px;
+      font-weight: 600;
+      border-radius: 6px;
+      border: 1.5px solid rgba(255,255,255,0.35);
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+      transition: background .2s, border-color .2s;
+    }
+    .pub-links .button:hover {
+      background: rgba(255,255,255,0.18);
+      border-color: rgba(255,255,255,0.6);
+      color: #fff;
+    }
+
+    /* ── Sections ── */
+    .pub-section { padding: 3.5rem 1.5rem; }
+    .pub-section.alt { background: var(--light); }
+
+    .sec-title {
+      font-size: 1.55rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 3px solid var(--accent);
+      display: inline-block;
+    }
+
+    /* ── Abstract ── */
+    .abstract-text {
+      font-size: 1rem;
+      line-height: 1.9;
+      color: var(--text);
+      text-align: justify;
+      hyphens: auto;
+      -webkit-hyphens: auto;
+      word-spacing: -0.01em;
+    }
+
+    .kw-pill {
+      display: inline-block;
+      background: #e8f0fb;
+      color: var(--accent);
+      border: 1px solid #c3d7f0;
+      border-radius: 20px;
+      padding: 2px 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      margin: 3px 2px;
+    }
+
+    hr.sec-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ============================================================== HERO -->
+<section class="pub-hero">
+  <div class="container is-max-desktop has-text-centered">
+
+    <div><span class="venue-badge">TMLR 2026</span></div>
+
+    <h1 class="pub-title">
+      Learning Multimodal Energy-based Model with Multimodal<br>
+      Variational Auto-Encoder via MCMC Revision
+    </h1>
+
+    <div class="pub-authors">
+      <span><a href="mailto:jcui2@futurewei.com">Jiali Cui</a></span>,&ensp;
+      <span>Zhiqiang Lao</span>,&ensp;
+      <span>Heather Yu</span>
+    </div>
+
+    <div class="pub-inst">Futurewei Technologies Inc, Basking Ridge, New Jersey, USA</div>
+
+    <div class="pub-links">
+      <a href="static/pdfs/TMLR_Futurewei_Camera_Ready.pdf" target="_blank" class="button">
+        <span class="icon"><i class="fas fa-file-pdf"></i></span>
+        <span>Paper</span>
+      </a>
+      <span class="button" style="opacity:0.5; cursor:default;" title="Coming soon">
+        <span class="icon"><i class="fab fa-github"></i></span>
+        <span>Code (coming soon)</span>
+      </span>
+      <!--
+      <a href="#" target="_blank" class="button">
+        <span class="icon"><i class="ai ai-arxiv"></i></span>
+        <span>arXiv</span>
+      </a>
+      -->
+    </div>
+
+  </div>
+</section>
+
+<hr class="sec-divider">
+
+<!-- ============================================================== ABSTRACT -->
+<section class="pub-section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-10">
+        <h2 class="sec-title">Abstract</h2>
+        <p class="abstract-text">
+          Energy-based models (EBMs) are a flexible class of deep generative models and are well-suited to capture
+          complex dependencies in multimodal data. However, learning multimodal EBM by maximum likelihood requires
+          Markov Chain Monte Carlo (MCMC) sampling in the joint data space, where noise-initialized Langevin dynamics
+          often mixes poorly and fails to discover coherent inter-modal relationships. Multimodal VAEs have made
+          progress in capturing such inter-modal dependencies by introducing a shared latent generator and a joint
+          inference model. However, both are parameterized as unimodal Gaussian (or Laplace), which severely limits
+          their ability to approximate the complex structure induced by multimodal data.
+        </p>
+        <br>
+        <p class="abstract-text">
+          In this work, we study the joint learning problem of the multimodal EBM, shared latent generator, and joint
+          inference model. We present a framework that effectively interweaves their MLE updates with corresponding
+          MCMC refinements in both the <em>data space</em> and the <em>latent space</em>. The generator learns to
+          produce coherent multimodal samples that serve as strong initial states for EBM sampling, while the
+          inference model provides informative latent initializations for generator posterior sampling. Together, these
+          complementary models enable effective EBM sampling and learning, yielding realistic and coherent multimodal
+          outputs. Extensive experiments demonstrate superior synthesis quality and coherence over various baselines,
+          with ablation studies validating the effectiveness and scalability of the proposed framework.
+        </p>
+
+        <div style="margin-top: 1.4rem;">
+          <span class="kw-pill">Energy-Based Models</span>
+          <span class="kw-pill">MCMC Sampling</span>
+          <span class="kw-pill">Langevin Dynamics</span>
+          <span class="kw-pill">Multimodal Generation</span>
+          <span class="kw-pill">Variational Autoencoders</span>
+          <span class="kw-pill">Maximum Likelihood</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="sec-divider">
+
+<!-- ============================================================== BIBTEX -->
+<section class="pub-section alt">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-10">
+        <h2 class="sec-title">BibTeX</h2>
+        <p style="color: var(--muted); font-size: 0.9rem;">Coming soon.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<script src="./static/js/jquery.min.js"></script>
+
+</body>
+</html>

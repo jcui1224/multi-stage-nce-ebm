@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Learning Adaptive Multi-Stage Energy-based Prior for Hierarchical Generative Model</title>
+
+  <!-- MathJax -->
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <!-- Bulma -->
+  <link rel="stylesheet" href="./static/css/bulma.min.css"/>
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css"/>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+
+  <link rel="icon" href="./static/images/favicon.ico"/>
+
+  <style>
+    :root {
+      --navy:   #0d1b2a;
+      --blue:   #1b4f72;
+      --accent: #2874a6;
+      --light:  #f4f6f9;
+      --border: #dce3ec;
+      --text:   #2c3e50;
+      --muted:  #6b7c93;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', 'Noto Sans', sans-serif;
+      color: var(--text);
+      background: #fff;
+    }
+
+    /* ── Hero ── */
+    .pub-hero {
+      background: linear-gradient(160deg, var(--navy) 0%, #1a2f4a 55%, var(--blue) 100%);
+      padding: 4rem 1.5rem 3rem;
+    }
+
+    .pub-hero .pub-title {
+      font-size: clamp(1.45rem, 3vw, 2.1rem);
+      font-weight: 700;
+      line-height: 1.35;
+      color: #fff;
+    }
+
+    .venue-badge {
+      display: inline-block;
+      background: #c0392b;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      padding: 3px 14px;
+      border-radius: 4px;
+      margin-bottom: 1.2rem;
+      text-transform: uppercase;
+    }
+
+    .pub-authors {
+      color: rgba(255,255,255,0.85);
+      font-size: 1.05rem;
+      margin: 1.1rem 0 0.4rem;
+    }
+
+    .pub-authors a {
+      color: #7ec8e3;
+      text-decoration: none;
+      transition: color .15s;
+    }
+    .pub-authors a:hover { color: #aee6f8; text-decoration: underline; }
+
+    .pub-inst {
+      color: rgba(255,255,255,0.55);
+      font-size: 0.95rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .pub-links .button {
+      margin: 4px 6px;
+      font-weight: 600;
+      border-radius: 6px;
+      border: 1.5px solid rgba(255,255,255,0.35);
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+      transition: background .2s, border-color .2s;
+    }
+    .pub-links .button:hover {
+      background: rgba(255,255,255,0.18);
+      border-color: rgba(255,255,255,0.6);
+      color: #fff;
+    }
+
+    /* ── Sections ── */
+    .pub-section { padding: 3.5rem 1.5rem; }
+    .pub-section.alt { background: var(--light); }
+
+    .sec-title {
+      font-size: 1.55rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 3px solid var(--accent);
+      display: inline-block;
+    }
+
+    /* ── Abstract ── */
+    .abstract-text {
+      font-size: 1rem;
+      line-height: 1.9;
+      color: var(--text);
+      text-align: justify;
+      hyphens: auto;
+      -webkit-hyphens: auto;
+      word-spacing: -0.01em;
+    }
+
+    .kw-pill {
+      display: inline-block;
+      background: #e8f0fb;
+      color: var(--accent);
+      border: 1px solid #c3d7f0;
+      border-radius: 20px;
+      padding: 2px 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      margin: 3px 2px;
+    }
+
+    hr.sec-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0;
+    }
+
+    /* ── BibTeX Card ── */
+    .bibtex-card {
+      background: linear-gradient(145deg, #1a212b 0%, #1e2733 55%, #202b38 100%);
+      border: 1px solid #344252;
+      border-radius: 12px;
+      box-shadow: 0 12px 28px rgba(8, 12, 18, 0.38);
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .bibtex-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 32px rgba(8, 12, 18, 0.5);
+    }
+
+    .bibtex-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(90deg, #222d3a 0%, #253242 100%);
+      border-bottom: 1px solid #3a4a5d;
+      padding: 0.55rem 0.8rem;
+    }
+
+    .bibtex-title {
+      font-size: 0.82rem;
+      color: #c0cfdf;
+      letter-spacing: 0.04em;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .copy-bibtex-btn {
+      border: 1px solid #4b6178;
+      background: #2a3645;
+      color: #d4e1ee;
+      border-radius: 7px;
+      padding: 0.3rem 0.55rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .copy-bibtex-btn:hover {
+      background: #324152;
+      border-color: #607b97;
+      box-shadow: 0 0 0 3px rgba(96, 123, 151, 0.22);
+    }
+
+    .copy-bibtex-btn.copied {
+      background: #eaf9ef;
+      border-color: #8dc4a0;
+      color: #23653a;
+    }
+
+    .bibtex-code {
+      margin: 0;
+      padding: 1rem 1.1rem;
+      background: linear-gradient(160deg, #171f29 0%, #1a2430 55%, #1e2a38 100%);
+      overflow-x: auto;
+    }
+
+    .bibtex-code code {
+      font-family: 'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: #d3dee9;
+      white-space: pre;
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ============================================================== HERO -->
+<section class="pub-hero">
+  <div class="container is-max-desktop has-text-centered">
+
+    <div><span class="venue-badge">TMLR 2026</span></div>
+
+    <h1 class="pub-title">
+      Learning Adaptive Multi-Stage Energy-based Prior for<br>
+      Hierarchical Generative Model
+    </h1>
+
+    <div class="pub-authors">
+      <span><a href="mailto:jcui2@futurewei.com">Jiali Cui</a></span>,&ensp;
+      <span>Tian Han</span>
+    </div>
+
+    <div class="pub-inst">Stevens Institution of Technology, Hoboken, New Jersey, USA</div>
+
+    <div class="pub-links">
+      <a href="static/pdfs/6088_Learning_Adaptive_Multi_S.pdf" target="_blank" class="button">
+        <span class="icon"><i class="fas fa-file-pdf"></i></span>
+        <span>Paper</span>
+      </a>
+      <span class="button" style="opacity:0.5; cursor:default;" title="Coming soon">
+        <span class="icon"><i class="fab fa-github"></i></span>
+        <span>Code (coming soon)</span>
+      </span>
+      <!--
+      <a href="#" target="_blank" class="button">
+        <span class="icon"><i class="ai ai-arxiv"></i></span>
+        <span>arXiv</span>
+      </a>
+      -->
+    </div>
+
+  </div>
+</section>
+
+<hr class="sec-divider">
+
+<!-- ============================================================== ABSTRACT -->
+<section class="pub-section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-10">
+        <h2 class="sec-title">Abstract</h2>
+        <p class="abstract-text">
+          Hierarchical generative models represent data with multiple layers of latent variables organized in a
+          top-down structure. These models typically assume Gaussian priors for multi-layer latent variables, which
+          lack expressivity for the contextual dependencies among latents, resulting in a distribution gap between the
+          prior and the learned posterior. Recent works have explored hierarchical energy-based prior models (EBMs) as
+          a more expressive alternative to bridge this gap. However, most approaches learn only a <em>single</em> EBM,
+          which can be ineffective when the target distribution is highly multi-modal and multi-scale across
+          hierarchical layers of latent variables. In this work, we propose a framework that learns <em>multi-stage</em>
+          hierarchical EBM priors, where a sequence of adaptive stages progressively refines the prior to match the
+          posterior. Our method supports both joint training with the generator and a more efficient two-phase strategy
+          for deeper hierarchies. Experiments across standard benchmarks show that our approach consistently generates
+          higher-quality images and learns richer hierarchical representations.
+        </p>
+
+        <div style="margin-top: 1.4rem;">
+          <span class="kw-pill">Hierarchical Generative Models</span>
+          <span class="kw-pill">Energy-Based Priors</span>
+          <span class="kw-pill">Multi-Stage Noise-Contrastive-Estimation</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="sec-divider">
+
+<!-- ============================================================== BIBTEX -->
+<section class="pub-section alt">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-10">
+        <h2 class="sec-title">BibTeX</h2>
+        <div class="bibtex-card">
+          <div class="bibtex-toolbar">
+            <span class="bibtex-title">Citation Entry</span>
+            <button id="copyBibtexBtn" class="copy-bibtex-btn" type="button">Copy</button>
+          </div>
+          <pre class="bibtex-code"><code id="bibtexText">@article{
+      cui2026multi-nce,
+      title={Learning Adaptive Multi-Stage Energy-based Prior for Hierarchical Generative Model},
+      author={Jiali Cui and Tian Han},
+      journal={Transactions on Machine Learning Research},
+      issn={2835-8856},
+      year={2026},
+      url={https://openreview.net/forum?id=W2zqUkA9Ub},
+      note={}
+}</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<script src="./static/js/jquery.min.js"></script>
+<script>
+  (function () {
+    var copyBtn = document.getElementById('copyBibtexBtn');
+    var bibtexText = document.getElementById('bibtexText');
+    if (!copyBtn || !bibtexText || !navigator.clipboard) {
+      return;
+    }
+
+    copyBtn.addEventListener('click', function () {
+      navigator.clipboard.writeText(bibtexText.textContent).then(function () {
+        copyBtn.textContent = 'Copied';
+        copyBtn.classList.add('copied');
+        setTimeout(function () {
+          copyBtn.textContent = 'Copy';
+          copyBtn.classList.remove('copied');
+        }, 1400);
+      });
+    });
+  })();
+</script>
+
+</body>
+</html>
